@@ -74,6 +74,12 @@ else:
 
 
 # renamed methods / properties
+import warnings
+
+# Suppress Pydantic warnings on Python 3.14+ (until Pydantic V3)
+if sys.version_info >= (3, 14):
+    warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+
 def parse_obj(model: type[_ModelT], value: object) -> _ModelT:
     if PYDANTIC_V2:
         return model.model_validate(value)
