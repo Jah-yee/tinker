@@ -36,3 +36,6 @@ class TrainingRun(BaseModel):
 
     user_metadata: dict[str, str] | None = None
     """Optional metadata about this training run, set by the end-user"""
+
+    total_cost: float | None = None
+    """The total cost incurred by this training run (in USD)"""

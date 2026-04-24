@@ -45,9 +45,14 @@ AVAILABLE_COLUMNS: Dict[str, tuple[str, Callable[["TrainingRun"], str], str]] = 
         lambda r: format_timestamp(r.last_checkpoint.time) if r.last_checkpoint else "N/A",
         "Time of last checkpoint",
     ),
+    "cost": (
+        "Cost ($)",
+        lambda r: f"${r.total_cost:.2f}" if r.total_cost else "N/A",
+        "Total cost incurred by this training run",
+    ),
 }
 
-DEFAULT_COLUMNS = ["id", "model", "lora", "updated", "status"]
+DEFAULT_COLUMNS = ["id", "model", "lora", "updated", "status", "cost"]
 
 
 class RunListOutput(OutputBase):
@@ -183,6 +188,10 @@ class RunInfoOutput(OutputBase):
             rows.append(["Metadata", ""])
             for key, value in self.run.user_metadata.items():
                 rows.append([f"  - {key}", value])
+
+        # Total cost
+        if self.run.total_cost is not None:
+            rows.append(["Total Cost", f"${self.run.total_cost:.2f}"])
 
         return rows
 
